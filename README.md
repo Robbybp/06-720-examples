@@ -9,4 +9,4 @@ code that implements or applies the algorithms used in PSE can be quite a bit
 more complicated than these concepts look when written on a whiteboard.
 
 I make no promises, but will try to update and add to these examples when I
-have time.
+have time. Contributions welcome.

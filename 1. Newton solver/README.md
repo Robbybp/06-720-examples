@@ -9,7 +9,7 @@ for these purposes can be a nontrivial exercise in itself.
 
 Here I've implemented Newton's method using the Ampl Solver Library (ASL) for
 derivatives and HSL MA28 for factorizing the sparse unsymmetric Jacobian.
-The source code needs to be compile against these libraries, then can be called
+The source code needs to be compiled against these libraries, then can be called
 using the Ampl interface (e.g. from the command line, Ampl, or Pyomo).
 
 The following instructions assume you are using a Linux machine, and have been

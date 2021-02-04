@@ -1,8 +1,10 @@
+import os
 import pyomo.environ as pyo
 
 m = pyo.ConcreteModel(name='06-720 A1.3')
 
-solver = pyo.SolverFactory('newton')
+executable = os.path.join(os.pardir, 'newton')
+solver = pyo.SolverFactory(executable)
 
 def c1_rule(m):
     return 2*m.x1**2 + m.x2**2 - 5 == 0
@@ -18,8 +20,6 @@ m.c2 = pyo.Constraint(rule=c2_rule)
 
 m.x1 = 1e8
 m.x2 = -1e8
-#m.x1 = 1.5
-#m.x2 = 1.0
 
 solver.solve(m, tee=True)
 

@@ -118,7 +118,7 @@ int main(int argc, char **argv){
     double eps_conv = 0.5*inner_product(n_con, f, f);
     log_iter(iter, eps_conv);
     if (check_conv_ip(n_con, f, TOLERANCE)) {
-      printf("\nSolution found.\n||f|| = %e\n", eps_conv);
+      printf("\nSolution found.\n||f||^2 = %e\n", eps_conv);
 #if VERBOSE
       printf("\nVariable values are:\n");
       for (int i=0; i<n_var; i++){

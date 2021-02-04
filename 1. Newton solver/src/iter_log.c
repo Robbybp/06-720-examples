@@ -2,7 +2,7 @@
 #include "iter_log.h"
 
 int print_header(void){
-  printf("\n\tIter\t||f||\n");
+  printf("\n\tIter\t||f||^2\n");
   return 0;
 }
 

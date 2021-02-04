@@ -3,7 +3,9 @@ import pyomo.environ as pyo
 
 m = pyo.ConcreteModel(name='06-720 A1.3')
 
-executable = os.path.join(os.pardir, 'newton')
+FILE_DIR = os.path.dirname(__file__)
+
+executable = os.path.join(FILE_DIR, os.pardir, 'newton')
 solver = pyo.SolverFactory(executable)
 
 def c1_rule(m):

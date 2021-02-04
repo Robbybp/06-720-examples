@@ -1,3 +1,4 @@
+RM = rm -f
 CC = gcc
 FC = gfortran
 
@@ -14,5 +15,10 @@ LIBMA28 = $(MA28_DIR)/libma28.a
 
 DEPS = -ldl -lm -lgfortran
 
+BIN_DIR = ..
+
 newton: newton.c iter_log.c convergence.c linalg.c
-	$(CC) $(CCFLAGS) -I$(ASL_DIR) $^ $(LIBASL) $(LIBMA28) $(DEPS) -o $@
+	$(CC) $(CCFLAGS) -I$(ASL_DIR) $^ $(LIBASL) $(LIBMA28) $(DEPS) -o $(BIN_DIR)/$@
+
+clean:
+	$(RM) $(BIN_DIR)/newton

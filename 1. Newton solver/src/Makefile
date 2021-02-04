@@ -1,5 +1,5 @@
 RM = rm -f
-CC = gcc
+CC = gcc -std=gnu99
 FC = gfortran
 
 CCFLAGS = -Wall

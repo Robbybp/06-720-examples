@@ -12,6 +12,8 @@ solver = pyo.SolverFactory(executable)
 
 """
 One time-step of a dynamic shrinking core reaction model.
+Two components: A in the inner core, B in the outer region.
+`interface_radius` divides the two.
 """
 
 m = pyo.ConcreteModel(name='shrinking-core')
@@ -48,8 +50,9 @@ def holdup_rule(m, j):
 m.holdup_eqn = pyo.Constraint(m.comp, rule=holdup_rule)
 
 def sum_rule(m):
-    #return 1. == sum(m.x[j] for j in m.comp)
-    return m.V_particle * m.dens == sum(m.comp_holdup[j] for j in m.comp)
+    return 1. == sum(m.x[j] for j in m.comp)
+    #return m.V_particle * m.dens == sum(m.comp_holdup[j] for j in m.comp)
+    # Summing mole fractions vs. molar holdups give identical results so far.
 m.sum_eqn = pyo.Constraint(rule=sum_rule)
 
 m.k0 = pyo.Var(initialize=1.)
@@ -76,12 +79,13 @@ def reaction_rate_rule(m):
 m.reaction_rate_eqn = pyo.Constraint(rule=reaction_rate_rule)
 
 m.comp_accum = pyo.Var(m.comp, initialize={'A': -1., 'B': 1.})
+# Reaction A -> B
 m.stoich = pyo.Param(m.comp, initialize={'A': -1, 'B': 1.})
 def diff_rule(m, j):
     return m.comp_accum[j] == m.V_particle * m.stoich[j] * m.reaction_rate
 m.diff_eqn = pyo.Constraint(m.comp, rule=diff_rule)
 
-m.comp_holdup_prev = pyo.Var(m.comp, initialize={'A': 0., 'B': 4.})
+m.comp_holdup_prev = pyo.Var(m.comp, initialize={'A': 1e-5, 'B': 4.})
 m.comp_holdup_prev.fix()
 m.comp_holdup.unfix()
 m.delta_t = pyo.Param(initialize=1.)
@@ -89,6 +93,21 @@ def disc_rule(m, j):
     # Implicit Euler
     return m.comp_holdup[j] == m.comp_holdup_prev[j] + m.delta_t*m.comp_accum[j]
 m.disc_eqn = pyo.Constraint(m.comp, rule=disc_rule)
+
+# Initialize to a poor starting point.
+# For such a small, simple system, convergence still seems to be robust.
+# However, the current tolerance is large enough that some of the 
+# results are "infeasible" (e.g. negative holdups).
+m.x['A'] = 75.
+m.x['B'] = -50.
+m.dens = -4000.
+m.interface_radius = 100.
+m.comp_holdup['A'] = -2000.
+m.comp_holdup['B'] = 4000.
+m.rate_coef = 1000.
+m.reaction_rate = -20000.
+m.comp_accum['A'] = 1000.
+m.comp_accum['B'] = 1000.
 
 try:
     solver.solve(m, tee=True)

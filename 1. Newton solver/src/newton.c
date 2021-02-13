@@ -210,14 +210,20 @@ int main(int argc, char **argv){
     //break;
   } // while(iter<MAX_ITER)
 
-
-  /* TODO:
-   * Add failure message if iter == MAX_ITER
-   * Write sol file.
-   * Function for printing useful information at every iteration.
-   *
-   * See compile.sh
-   */
+  if (iter == MAX_ITER){
+    printf("\nIteration limit exceeded.\n");
+    /* Could print eps_conv, but if MAX_ITER == 0, it won't have
+     * been defined.
+     */
+    strcpy(sol_msg, "Iteration limit exceeded.");
+    solve_result_num = 0;
+    Oinfo.wantsol = 9;
+    /* ^ (write a sol file & suppress printing of solution message) */
+    write_sol(sol_msg, x, NULL, &Oinfo);
+    /* ^ Want to return the last vector we checked for convergence, x,
+     * rather than x_plus
+     */
+  }
 
   free(entries);
   free(row);

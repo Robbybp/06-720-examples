@@ -162,6 +162,7 @@ int main(int argc, char **argv){
     assert(k == nzc);
 
 #if DEBUG
+    printf("Jacobian:\n");
     for (int k=0; k<nzc; k++){
       printf("%i, %i, %f\n", row[k], col[k], entries[k]);
     }
@@ -192,6 +193,9 @@ int main(int argc, char **argv){
     /* Update variable vector */
     for (int i=0; i<n_var; i++){
       x_plus[i] = x[i] + d[i];
+#if DEBUG
+      printf("x_plus[%i] = %f", i, x_plus[i]);
+#endif
     }
 
     /* Update f. Want to do this before the next time we check
